@@ -35,6 +35,11 @@ for i = skipsize+(index-1)*step+1:skipsize+index*step
     ori_rows = size(img,1);
     ori_cols = size(img,2);
     data_all = zeros(ori_rows,ori_cols,fea_cha,'single');
+%     data_all1 = zeros(ori_rows,ori_cols,30,'single');
+%     data_all2 = zeros(ori_rows,ori_cols,30,'single');
+%     data_all3 = zeros(ori_rows,ori_cols,30,'single');
+%     data_all4 = zeros(ori_rows,ori_cols,30,'single');
+%     data_all5 = zeros(ori_rows,ori_cols,30,'single');
     for j = 1:size(scale_array,2)
         long_size = base_size*scale_array(j) + 1;
         new_rows = long_size;
@@ -45,7 +50,23 @@ for i = skipsize+(index-1)*step+1:skipsize+index*step
             new_rows = round(long_size/single(ori_cols)*ori_rows);
         end 
         img_scale = imresize(img,[new_rows new_cols],'bilinear');
-        data_all = data_all + scale_process(net,img_scale,fea_cha,crop_size,ori_rows,ori_cols,mean_r,mean_g,mean_b);
+        if ( strcmp(data_name, 'ADE20K') == 1 )
+            split = 1;
+            data_all(:,:,1:30) = data_all(:,:,1:30) + scale_process(split,net,img_scale,fea_cha,crop_size,ori_rows,ori_cols,mean_r,mean_g,mean_b);
+            split = 2;
+            data_all(:,:,31:60) = data_all(:,:,31:60) + scale_process(split,net,img_scale,fea_cha,crop_size,ori_rows,ori_cols,mean_r,mean_g,mean_b);
+            split = 3;
+            data_all(:,:,61:90) = data_all(:,:,61:90) + scale_process(split,net,img_scale,fea_cha,crop_size,ori_rows,ori_cols,mean_r,mean_g,mean_b);
+            split = 4;
+            data_all(:,:,91:120) = data_all(:,:,91:120) + scale_process(split,net,img_scale,fea_cha,crop_size,ori_rows,ori_cols,mean_r,mean_g,mean_b);
+            split = 5;
+            data_all(:,:,121:150) = data_all(:,:,121:150) + scale_process(split,net,img_scale,fea_cha,crop_size,ori_rows,ori_cols,mean_r,mean_g,mean_b);
+            % data_all = bsxfun(@rdivide, data_all, sum(data_all, 3));
+        else
+            split = 0;
+            data_all = data_all + scale_process(split,net,img_scale,fea_cha,crop_size,ori_rows,ori_cols,mean_r,mean_g,mean_b);
+            data_all = bsxfun(@rdivide, data_all, sum(data_all, 3));
+        end
     end
     
     data_all = data_all/size(scale_array,2);

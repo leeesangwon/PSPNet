@@ -25,6 +25,10 @@ for i = 1: numel(filesPred)
     if(strcmp(data_name,'cityscapes'))
         strPred = strrep(strPred,'gtFine_labelTrainIds','leftImg8bit');
     end
+    if(strcmp(data_name, 'ADE20K'))
+        strPred = strsplit(str{1}, '/');
+        strPred = strPred{end};
+    end
     filePred = fullfile(pathPred, strPred);
     fileAnno = fullfile(pathAnno, str{2});
     if ~exist(fileAnno, 'file')

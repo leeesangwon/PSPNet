@@ -1,5 +1,5 @@
-function data_output = scale_process(net,img_scale,fea_cha,crop_size,ori_rows,ori_cols,mean_r,mean_g,mean_b)
-    data_output = zeros(ori_rows,ori_cols,fea_cha,'single');
+function data_output = scale_process(split,net,img_scale,fea_cha,crop_size,ori_rows,ori_cols,mean_r,mean_g,mean_b)
+    % data_output = zeros(ori_rows,ori_cols,fea_cha,'single');
     new_rows = size(img_scale,1);
     new_cols = size(img_scale,2);
     long_size = new_rows;
@@ -53,7 +53,18 @@ function data_output = scale_process(net,img_scale,fea_cha,crop_size,ori_rows,or
         score = data_scale./count_scale;
         score = score(1:new_rows,1:new_cols,:); 
     end
-
-    data_output = imresize(score,[ori_rows ori_cols],'bilinear');
-    data_output = bsxfun(@rdivide, data_output, sum(data_output, 3));
+    if( split == 0 )
+        data_output = imresize(score,[ori_rows ori_cols],'bilinear');
+        data_output = bsxfun(@rdivide, data_output, sum(data_output, 3));
+    elseif( split == 1 )
+        data_output = imresize(score(:,:,1:30),[ori_rows ori_cols],'bilinear');
+    elseif( split == 2 )
+        data_output = imresize(score(:,:,31:60),[ori_rows ori_cols],'bilinear');
+    elseif( split == 3)
+        data_output = imresize(score(:,:,61:90),[ori_rows ori_cols],'bilinear');
+    elseif( split == 4)
+        data_output = imresize(score(:,:,91:120),[ori_rows ori_cols],'bilinear');
+    elseif( split == 5)
+        data_output = imresize(score(:,:,121:150),[ori_rows ori_cols],'bilinear');
+    end
 end
