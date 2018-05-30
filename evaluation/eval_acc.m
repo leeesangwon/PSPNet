@@ -26,8 +26,7 @@ for i = 1: numel(filesPred)
         strPred = strrep(strPred,'gtFine_labelTrainIds','leftImg8bit');
     end
     if(strcmp(data_name, 'ADE20K'))
-        strPred = strsplit(str{1}, '/');
-        strPred = strPred{end};
+        strPred = strrep(strPred,'_seg_labelid', '');
     end
     filePred = fullfile(pathPred, strPred);
     fileAnno = fullfile(pathAnno, str{2});
